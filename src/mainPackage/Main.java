@@ -27,7 +27,7 @@ public class Main extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        String file_path = "file:resources/B-man/bMan";
+        String file_path = "file:resources/nilkomol/nilkomol";
 
         String audio = "resources/audio1.mp3";
 
@@ -45,8 +45,8 @@ public class Main extends Application
         root.getChildren().add(canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        Image hero_img_right = new Image(file_path+"_S.png");
-        Image hero_img_left = new Image(file_path+"1_S.png");
+        Image hero_img_right = new Image(file_path+"ff_s.png");
+        Image hero_img_left = new Image(file_path+"ff_l_s.png");
 
         Image monster_img = new Image("file:resources/monster.png");
 
@@ -58,14 +58,28 @@ public class Main extends Application
 
         for(int i=0;i<8;i++)
         {
-            imageArr[i] = new Image(file_path+ "_" + i + ".png" );
+            imageArr[i] = new Image(file_path +"ff_" + i + ".png" );
         }
 
         Image [] imageArr1 = new Image[8];
 
         for(int i=0;i<8;i++)
         {
-            imageArr1[i] = new Image(file_path+ "1_" + i + ".png" );
+            imageArr1[i] = new Image(file_path + "ff_l_" + i + ".png" );
+        }
+
+        Image [] imageArr2 = new Image[5];
+
+        for(int i=0;i<5;i++)
+        {
+            imageArr2[i] = new Image(file_path + "fight_" + i + ".png" );
+        }
+
+        Image [] imageArr3 = new Image[7];
+
+        for(int i=0;i<7;i++)
+        {
+            imageArr3[i] = new Image( "resources/monster/monster_"+ + i + ".png" );
         }
 
         double duration = 0.100;
@@ -74,15 +88,19 @@ public class Main extends Application
 
         AnimatedImage hero_left_motion = new AnimatedImage(imageArr1,duration);
 
+        AnimatedImage hero_fight_motion = new AnimatedImage(imageArr2,duration);
+
+        AnimatedImage monster_fight_motion = new AnimatedImage(imageArr3,duration);
+
         Enemy [] monsters = new Enemy[3];
 
         Background background = new Background(background_image,0,0,audio);
 
-        Protagonist hero = new Protagonist(hero_img_right, hero_img_left,2000,300/60.0,100,0,270,hero_right_motion , hero_left_motion, input);
+        Protagonist hero = new Protagonist(hero_img_right, hero_img_left,2000,100/60.0,100,0,230,hero_right_motion , hero_left_motion,hero_fight_motion, input);
 
-        monsters[0] = new Enemy(monster_img,null,500,100/60.0,100,1000,200,null,null,100);
-        monsters[1] = new Enemy(monster_img,null,500,100/60.0,100,1600,200,null,null,100);
-        monsters[2] = new Enemy(monster_img,null,500,100/60.0,100,2500,200,null,null,100);
+        monsters[0] = new Enemy(monster_img,null,500,80/60.0,100,1000,200,null,null,monster_fight_motion,300);
+        monsters[1] = new Enemy(monster_img,null,500,80/60.0,100,1600,200,null,null,monster_fight_motion,300);
+        monsters[2] = new Enemy(monster_img,null,500,80/60.0,100,2500,200,null,null,monster_fight_motion,300);
 
         scene.setOnKeyPressed(new EventHandler<KeyEvent>()
         {
@@ -125,11 +143,11 @@ public class Main extends Application
                 //gc.setFill(Color.TRANSPARENT);
                 for(int i=0;i<3;i++)
                 {
-                    monsters[i].draw(gc);
-                    if((int)t%3==0 && monsters[i].isAlive()) monsters[i].attack(hero);
-                    if((int)t%2==0) hero.attack(monsters[i]);
+                    if(!(monsters[i].withinRange(hero)) || ((int)t%1!=0))monsters[i].draw(gc);
+                    if((int)t%1==0 && monsters[i].isAlive()) monsters[i].attack(hero,gc,t);
+                    /*if((int)t%2==0)*/ hero.attack(monsters[i],gc,t);
                 }
-                if(hero.isAlive() && !hero.move(gc,t,background,monsters))hero.draw(gc);
+                if(hero.isAlive() && !hero.move(gc,t,background,monsters) && ((!input.contains("CONTROL"))))hero.draw(gc);
 
                 if(hero.getDistance()>=3400)
                 {

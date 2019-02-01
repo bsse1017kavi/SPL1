@@ -21,8 +21,8 @@ public class Protagonist extends Sprite
         gc.fillRect(20,20,100*this.getPercentage()/100,10);
     }
 
-    public Protagonist(Image view_right, Image view_left, double health, double baseDamage, double attackRadius, double posX, double posY, AnimatedImage right_motion, AnimatedImage left_motion, ArrayList<String> input) {
-        super(view_right, view_left, health, baseDamage, attackRadius, posX, posY, right_motion, left_motion);
+    public Protagonist(Image view_right, Image view_left, double health, double baseDamage, double attackRadius, double posX, double posY, AnimatedImage right_motion,AnimatedImage left_motion, AnimatedImage fight_motion, ArrayList<String> input) {
+        super(view_right, view_left, health, baseDamage, attackRadius, posX, posY, right_motion, left_motion,fight_motion);
         this.input = input;
     }
 
@@ -38,7 +38,9 @@ public class Protagonist extends Sprite
     {
         drawHealthBar(gc);
 
-        if(input.contains("LEFT"))
+        if(!isAlive()) return false;
+
+        if(input.contains("LEFT") && !input.contains("CONTROL"))
         {
             for(int i=0;i<3;i++)
             {
@@ -62,7 +64,7 @@ public class Protagonist extends Sprite
             return true;
         }
 
-        else if(input.contains("RIGHT"))
+        else if(input.contains("RIGHT") && !input.contains("CONTROL"))
         {
             for(int i=0;i<3;i++)
             {
@@ -90,9 +92,14 @@ public class Protagonist extends Sprite
     }
 
     @Override
-    public void attack(Sprite obj)
+    public void attack(Sprite obj,GraphicsContext gc,double t)
     {
-        if(input.contains("CONTROL") && withinRange(obj)) obj.takeDamage(this.getBaseDamage());
+        if(this.getHealth()<=0) setAlive(false);
+        if(isAlive() && input.contains("CONTROL"))
+        {
+            fight_animate(gc,t);
+            if(withinRange(obj) && ((int)t%1==0))obj.takeDamage(this.getBaseDamage());
+        }
     }
 
     @Override

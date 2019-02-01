@@ -23,6 +23,7 @@ public abstract class Sprite
 
     AnimatedImage right_motion;
     AnimatedImage left_motion;
+    AnimatedImage fight_motion;
 
     private double init_posX;
 
@@ -37,7 +38,7 @@ public abstract class Sprite
         return percentage = this.health/this.max_health*100;
     }
 
-    public Sprite(Image view_right, Image view_left, double health, double baseDamage, double attackRadius, double posX, double posY, AnimatedImage right_motion, AnimatedImage left_motion) {
+    public Sprite(Image view_right, Image view_left, double health, double baseDamage, double attackRadius, double posX, double posY, AnimatedImage right_motion, AnimatedImage left_motion,AnimatedImage fight_motion) {
         this.view_right = view_right;
         this.view_left = view_left;
         this.health = health;
@@ -49,6 +50,7 @@ public abstract class Sprite
         this.left_motion = left_motion;
         this.init_posX = posX;
         this.max_health = health;
+        this.fight_motion = fight_motion;
     }
 
     public void setAlive(boolean alive) {
@@ -73,7 +75,12 @@ public abstract class Sprite
         else gc.drawImage(left_motion.getFrame(t),posX,posY);
     }
 
-    public abstract  void attack(Sprite obj);
+    public void fight_animate(GraphicsContext gc,double t)
+    {
+        gc.drawImage(fight_motion.getFrame(t),posX,posY-50);
+    }
+
+    public abstract  void attack(Sprite obj,GraphicsContext gc,double t);
 
     public void takeDamage(double damage)
     {
@@ -146,7 +153,8 @@ public abstract class Sprite
 
     public boolean withinRange(Sprite obj)
     {
-        if(Math.abs(this.getPosX()-obj.posX)<this.attackRadius || Math.abs((this.posX+this.view_right.getWidth())-obj.posX)<this.attackRadius) return true;
+        if(((Math.abs(this.getPosX()-obj.posX))<=this.attackRadius /*|| (Math.abs((this.posX)-(obj.posX+obj.getView_right().getWidth())))<=this.attackRadius) || (Math.abs((this.posX)-(obj.posX+obj.getView_left().getWidth())))<=this.attackRadius*/))
+            return true;
 
         return false;
     }

@@ -10,8 +10,8 @@ public class Enemy extends Sprite
 {
     private double detectionRadius = 15;
 
-    public Enemy(Image view_right, Image view_left, double health, double baseDamage, double attackRadius, double posX, double posY, AnimatedImage right_motion, AnimatedImage left_motion, double detectionRadius) {
-        super(view_right, view_left, health, baseDamage, attackRadius, posX, posY, right_motion, left_motion);
+    public Enemy(Image view_right, Image view_left, double health, double baseDamage, double attackRadius, double posX, double posY, AnimatedImage right_motion, AnimatedImage left_motion,AnimatedImage fight_motion, double detectionRadius) {
+        super(view_right, view_left, health, baseDamage, attackRadius, posX, posY, right_motion, left_motion,fight_motion);
         this.detectionRadius = detectionRadius;
     }
 
@@ -25,9 +25,20 @@ public class Enemy extends Sprite
         else return false;
     }
 
-    public void attack(Sprite obj)
+    @Override
+    public void attack(Sprite obj,GraphicsContext gc,double t)
     {
-        if(this.withinRange(obj)) obj.takeDamage(this.getBaseDamage());
+        if(this.getHealth()<=0) setAlive(false);
+
+        if(this.withinRange(obj) && obj.isAlive())
+        {
+            gc.setFill(Color.YELLOW);
+            gc.fillRect(this.getPosX()+100,this.getPosY()-20,100,5);
+            gc.setFill(Color.RED);
+            gc.fillRect(this.getPosX()+100,this.getPosY()-20,100*this.getPercentage()/100,5);
+            fight_animate(gc,t);
+            obj.takeDamage(this.getBaseDamage());
+        }
     }
 
     @Override

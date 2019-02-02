@@ -27,9 +27,9 @@ public class Main extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        String file_path = "file:resources/nilkomol/nilkomol";
+        String file_path = "Nilkomol/nilkomol";
 
-        String audio = "resources/audio1.mp3";
+        String audio = "/audio1.mp3";
 
         primaryStage.setTitle("Thakurmar Jhuli");
         Pane root = new Pane();
@@ -48,9 +48,9 @@ public class Main extends Application
         Image hero_img_right = new Image(file_path+"ff_s.png");
         Image hero_img_left = new Image(file_path+"ff_l_s.png");
 
-        Image monster_img = new Image("file:resources/monster.png");
+        Image monster_img = new Image(ResourceLoader.load("monster.png"));
 
-        Image background_image = new Image("file:resources/forest0.png");
+        Image background_image = new Image("forest0.png");
 
         ArrayList<String> input = new ArrayList<String>();
 
@@ -58,28 +58,28 @@ public class Main extends Application
 
         for(int i=0;i<8;i++)
         {
-            imageArr[i] = new Image(file_path +"ff_" + i + ".png" );
+            imageArr[i] = new Image(ResourceLoader.load(file_path +"ff_" + i + ".png" ));
         }
 
         Image [] imageArr1 = new Image[8];
 
         for(int i=0;i<8;i++)
         {
-            imageArr1[i] = new Image(file_path + "ff_l_" + i + ".png" );
+            imageArr1[i] = new Image(ResourceLoader.load(file_path + "ff_l_" + i + ".png" ));
         }
 
         Image [] imageArr2 = new Image[5];
 
         for(int i=0;i<5;i++)
         {
-            imageArr2[i] = new Image(file_path + "fight_" + i + ".png" );
+            imageArr2[i] = new Image(ResourceLoader.load(file_path + "fight_" + i + ".png" ));
         }
 
         Image [] imageArr3 = new Image[7];
 
         for(int i=0;i<7;i++)
         {
-            imageArr3[i] = new Image( "resources/monster/monster_"+ + i + ".png" );
+            imageArr3[i] = new Image( ResourceLoader.load("monster/monster_"+ + i + ".png") );
         }
 
         double duration = 0.100;

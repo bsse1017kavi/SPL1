@@ -96,11 +96,12 @@ public class Main extends Application
 
         Background background = new Background(background_image,0,0,audio);
 
-        Protagonist hero = new Protagonist(hero_img_right, hero_img_left,2000,100/60.0,100,0,230,hero_right_motion , hero_left_motion,hero_fight_motion, input);
+        Protagonist hero = new Protagonist(hero_img_right, hero_img_left,2000,200/60.0,100,0,230,hero_right_motion , hero_left_motion,hero_fight_motion, input);
 
         monsters[0] = new Enemy(monster_img,null,500,80/60.0,100,1000,200,null,null,monster_fight_motion,300);
         monsters[1] = new Enemy(monster_img,null,500,80/60.0,100,1600,200,null,null,monster_fight_motion,300);
         monsters[2] = new Enemy(monster_img,null,500,80/60.0,100,2500,200,null,null,monster_fight_motion,300);
+
 
         scene.setOnKeyPressed(new EventHandler<KeyEvent>()
         {
@@ -143,7 +144,14 @@ public class Main extends Application
                 //gc.setFill(Color.TRANSPARENT);
                 for(int i=0;i<3;i++)
                 {
-                    if(!(monsters[i].withinRange(hero)) || ((int)t%1!=0))monsters[i].draw(gc);
+                    monsters[i].patrol(hero);
+                   // monsters[0].translate(-0.5);
+                    //monsters[i].draw(gc);
+
+                    if(!(monsters[i].withinRange(hero)) || ((int)t%1!=0))
+                    {
+                        monsters[i].draw(gc);
+                    }
                     if((int)t%1==0 && monsters[i].isAlive()) monsters[i].attack(hero,gc,t);
                     /*if((int)t%2==0)*/ hero.attack(monsters[i],gc,t);
                 }
@@ -174,6 +182,7 @@ public class Main extends Application
 
         primaryStage.setResizable(true);
         primaryStage.setFullScreen(true);
+        //primaryStage.setFullScreen(false);
         primaryStage.show();
     }
 

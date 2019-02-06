@@ -8,16 +8,22 @@ import java.util.Timer;
 
 public class Enemy extends Sprite
 {
-    private double detectionRadius = 15;
+    private double detectionRadius = 10;
+    private double patrolRadius = 500;
+
+    private double relativeX;
+
+    private boolean chk = true;
 
     public Enemy(Image view_right, Image view_left, double health, double baseDamage, double attackRadius, double posX, double posY, AnimatedImage right_motion, AnimatedImage left_motion,AnimatedImage fight_motion, double detectionRadius) {
         super(view_right, view_left, health, baseDamage, attackRadius, posX, posY, right_motion, left_motion,fight_motion);
         this.detectionRadius = detectionRadius;
+        this.relativeX = 0;
     }
 
-    public boolean detect(Sprite obj)
+    public boolean detect(Protagonist obj)
     {
-        if((Math.abs((this.getPosX()-obj.getPosX()))<=detectionRadius) || (Math.abs(this.getPosX()+319-obj.getPosX()))<=detectionRadius)
+        if((Math.abs((this.getPosX()-obj.getPosX()))<=detectionRadius) /*|| (Math.abs(this.getPosX()+319-obj.getPosX()))<=detectionRadius*/)
         {
             return true;
         }
@@ -58,5 +64,38 @@ public class Enemy extends Sprite
             else gc.drawImage(this.getView_left(),getPosX(),getPosY());
         }
 
+    }
+
+    public double getRelativeX() {
+        return relativeX;
+    }
+
+    public void patrol(Protagonist obj)
+    {
+        //System.out.println(detect(obj));
+        if(!withinRange(obj))
+        {
+            double patrolSpeed = 2;
+
+            if(relativeX<-patrolRadius) chk = false;
+            else if(relativeX>patrolRadius) chk = true;
+
+            //this.translate(5);
+            //System.out.println(patrolSpeed);
+            //System.out.println("___" + relativeX);
+            if( chk)
+            {
+                //if(relativeX<-100) chk=false;
+                this.translate(-(patrolSpeed));
+                this.relativeX-=patrolSpeed;
+            }
+
+            else  if(!chk)
+            {
+                //if(relativeX>100) chk=true;
+                this.translate(patrolSpeed);
+                this.relativeX+=patrolSpeed;
+            }
+        }
     }
 }

@@ -15,8 +15,6 @@ public class Background
     private Image view;
     private double backgroundX;
     private double backgroundY;
-    private Media media;
-    private MediaPlayer mp;
 
     private double init_posX;
 
@@ -69,21 +67,12 @@ public class Background
         return backgroundX;
     }
 
-    public Background(Image view, double backgroundX, double backgroundY,String audio_path) throws MalformedURLException
+    public Background(Image view, double backgroundX, double backgroundY)
     {
-        final String mediaLocation;
         this.view = view;
         this.backgroundX = backgroundX;
         this.backgroundY = backgroundY;
         this.init_posX = backgroundX;
-        URL fileUrl = Background.class.getResource(audio_path);
-        this.media = new Media(fileUrl.toExternalForm());
-        this.mp = new MediaPlayer(media);
-    }
-
-    public void play()
-    {
-        mp.setAutoPlay(true);
     }
 
     public double getBackgroundY() {

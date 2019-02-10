@@ -16,9 +16,4 @@ public final class ResourceLoader
         return input;
     }
 
-    public static String loadAudio(String path)
-    {
-        String input = ResourceLoader.class.getResource(path).toString();
-        return input;
-    }
 }

@@ -15,8 +15,8 @@ public class Enemy extends Sprite
 
     private boolean chk = true;
 
-    public Enemy(Image view_right, Image view_left, double health, double baseDamage, double attackRadius, double posX, double posY, AnimatedImage right_motion, AnimatedImage left_motion,AnimatedImage fight_motion, double detectionRadius) {
-        super(view_right, view_left, health, baseDamage, attackRadius, posX, posY, right_motion, left_motion,fight_motion);
+    public Enemy( double health, double baseDamage, double attackRadius, double posX, double posY, double detectionRadius) {
+        super(health, baseDamage, attackRadius, posX, posY);
         this.detectionRadius = detectionRadius;
         this.relativeX = 0;
     }
@@ -32,39 +32,18 @@ public class Enemy extends Sprite
     }
 
     @Override
-    public void attack(Sprite obj,GraphicsContext gc,double t)
+    public void attack(Sprite obj,double t)
     {
-        if(this.getHealth()<=0) setAlive(false);
 
-        if(this.withinRange(obj) && obj.isAlive())
+        if(this.withinRange(obj) && obj.isAlive() && this.isAlive())
         {
-            gc.setFill(Color.YELLOW);
-            gc.fillRect(this.getPosX()+100,this.getPosY()-20,100,5);
-            gc.setFill(Color.RED);
-            gc.fillRect(this.getPosX()+100,this.getPosY()-20,100*this.getPercentage()/100,5);
-            fight_animate(gc,t);
+            setStatus(5);
             obj.takeDamage(this.getBaseDamage());
         }
+
+        else setStatus(1);
     }
 
-    @Override
-    public void draw(GraphicsContext gc)
-    {
-        if(this.getHealth()<=0) setAlive(false);
-
-        if(isAlive())
-        {
-            gc.setFill(Color.YELLOW);
-            gc.fillRect(this.getPosX()+100,this.getPosY()-10,100,5);
-            gc.setFill(Color.RED);
-            gc.fillRect(this.getPosX()+100,this.getPosY()-10,100*this.getPercentage()/100,5);
-
-            if(!dir)gc.drawImage(this.getView_right(),getPosX(),getPosY());
-
-            else gc.drawImage(this.getView_left(),getPosX(),getPosY());
-        }
-
-    }
 
     public double getRelativeX() {
         return relativeX;
@@ -72,7 +51,6 @@ public class Enemy extends Sprite
 
     public void patrol(Protagonist obj)
     {
-        //System.out.println(detect(obj));
         if(!withinRange(obj))
         {
             double patrolSpeed = 2;
@@ -80,12 +58,8 @@ public class Enemy extends Sprite
             if(relativeX<-patrolRadius) chk = false;
             else if(relativeX>patrolRadius) chk = true;
 
-            //this.translate(5);
-            //System.out.println(patrolSpeed);
-            //System.out.println("___" + relativeX);
             if( chk)
             {
-                //if(relativeX<-100) chk=false;
                 this.translate(-(patrolSpeed));
                 this.relativeX-=patrolSpeed;
             }

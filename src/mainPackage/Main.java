@@ -45,8 +45,8 @@ public class Main extends Application
         gameEngine.play();
 
         primaryStage.setResizable(true);
-        //primaryStage.setFullScreen(true);
-        primaryStage.setFullScreen(false);
+        primaryStage.setFullScreen(true);
+        //primaryStage.setFullScreen(false);
         primaryStage.show();
     }
 

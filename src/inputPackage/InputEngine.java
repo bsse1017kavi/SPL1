@@ -16,6 +16,10 @@ public class InputEngine
 
     Scene scene;
 
+    boolean chk = false;
+
+    double gravity = 2;
+
     public InputEngine(Protagonist hero, Scene scene) {
         this.hero = hero;
         this.scene = scene;
@@ -43,11 +47,6 @@ public class InputEngine
 
     public void action(Enemy [] monsters, Background background,double time)
     {
-        if((int)time%3==0 && hero.getPosY()<=200)
-        {
-            hero.setStatus(1);
-            hero.setPosY(230);
-        }
 
         if(hero.getStatus()==3 && !input.containsKey("RIGHT"))
         {
@@ -62,6 +61,17 @@ public class InputEngine
         else if(hero.getStatus()==5 && (!input.containsKey("CONTROL")))
         {
             hero.setStatus(1);
+        }
+
+        else if(!input.containsKey("CONTROL") )
+        {
+            hero.setStatus(1);
+            if(hero.getPosY()<=130) chk = true;
+            else if(hero.getPosY()>=230) chk = false;
+            if( chk)
+            {
+                hero.ascend(-(gravity));
+            }
         }
 
 
@@ -106,8 +116,19 @@ public class InputEngine
         else if(removeActiveKey("UP"))
         {
             hero.setStatus(6);
-            //System.out.println((int)time);
-            if(hero.getPosY()>200)hero.ascend(30);
+
+            if(hero.getPosY()<=130) chk = true;
+            else if(hero.getPosY()>=230) chk = false;
+
+            if( chk)
+            {
+                hero.ascend(-(gravity));
+            }
+
+            else  if(!chk)
+            {
+               hero.ascend(100);
+            }
         }
 
     }

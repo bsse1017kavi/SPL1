@@ -8,22 +8,16 @@ import java.util.Timer;
 
 public class Enemy extends Sprite
 {
-    private double detectionRadius = 10;
-    private double patrolRadius = 500;
+    private double detectionRadius = 15;
 
-    private double relativeX;
-
-    private boolean chk = true;
-
-    public Enemy( double health, double baseDamage, double attackRadius, double posX, double posY, double detectionRadius) {
-        super(health, baseDamage, attackRadius, posX, posY);
+    public Enemy(Image view_right, Image view_left, double health, double baseDamage, double attackRadius, double posX, double posY, AnimatedImage right_motion, AnimatedImage left_motion,AnimatedImage fight_motion, double detectionRadius) {
+        super(view_right, view_left, health, baseDamage, attackRadius, posX, posY, right_motion, left_motion,fight_motion);
         this.detectionRadius = detectionRadius;
-        this.relativeX = 0;
     }
 
-    public boolean detect(Protagonist obj)
+    public boolean detect(Sprite obj)
     {
-        if((Math.abs((this.getPosX()-obj.getPosX()))<=detectionRadius) /*|| (Math.abs(this.getPosX()+319-obj.getPosX()))<=detectionRadius*/)
+        if((Math.abs((this.getPosX()-obj.getPosX()))<=detectionRadius) || (Math.abs(this.getPosX()+319-obj.getPosX()))<=detectionRadius)
         {
             return true;
         }
@@ -32,44 +26,37 @@ public class Enemy extends Sprite
     }
 
     @Override
-    public void attack(Sprite obj,double t)
+    public void attack(Sprite obj,GraphicsContext gc,double t)
     {
+        if(this.getHealth()<=0) setAlive(false);
 
-        if(this.withinRange(obj) && obj.isAlive() && this.isAlive())
+        if(this.withinRange(obj) && obj.isAlive())
         {
-            setStatus(5);
+            gc.setFill(Color.YELLOW);
+            gc.fillRect(this.getPosX()+100,this.getPosY()-20,100,5);
+            gc.setFill(Color.RED);
+            gc.fillRect(this.getPosX()+100,this.getPosY()-20,100*this.getPercentage()/100,5);
+            fight_animate(gc,t);
             obj.takeDamage(this.getBaseDamage());
         }
-
-        else setStatus(1);
     }
 
-
-    public double getRelativeX() {
-        return relativeX;
-    }
-
-    public void patrol(Protagonist obj)
+    @Override
+    public void draw(GraphicsContext gc)
     {
-        if(!withinRange(obj))
+        if(this.getHealth()<=0) setAlive(false);
+
+        if(isAlive())
         {
-            double patrolSpeed = 2;
+            gc.setFill(Color.YELLOW);
+            gc.fillRect(this.getPosX()+100,this.getPosY()-10,100,5);
+            gc.setFill(Color.RED);
+            gc.fillRect(this.getPosX()+100,this.getPosY()-10,100*this.getPercentage()/100,5);
 
-            if(relativeX<-patrolRadius) chk = false;
-            else if(relativeX>patrolRadius) chk = true;
+            if(!dir)gc.drawImage(this.getView_right(),getPosX(),getPosY());
 
-            if( chk)
-            {
-                this.translate(-(patrolSpeed));
-                this.relativeX-=patrolSpeed;
-            }
-
-            else  if(!chk)
-            {
-                //if(relativeX>100) chk=true;
-                this.translate(patrolSpeed);
-                this.relativeX+=patrolSpeed;
-            }
+            else gc.drawImage(this.getView_left(),getPosX(),getPosY());
         }
+
     }
 }

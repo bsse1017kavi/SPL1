@@ -23,6 +23,7 @@ public class GameEngine
 
     Protagonist hero;
     ArrayList<Enemy> monsters = new ArrayList<>();
+    Boss shakchunni;
     Background background;
     SoundEngine soundEngine;
 
@@ -34,7 +35,7 @@ public class GameEngine
        // monsters.add(new Enemy(500,80/60.0,100,3200,200,319,308,300));
         //monsters.add(new Enemy(500,80/60.0,100,800,200,319,308,300));
         //monsters[3] = new Enemy(500,80/60.0,100,700,200,319,308,300);
-        Boss shakchunni = new Boss(2500,380/60.0,200,3500,200,500,500,300);
+        shakchunni = new Boss(2500,380/60.0,200,3500,200,500,500,300);
         monsters.add(shakchunni);
         //monsters[3] =  new Enemy(2500,380/60.0,200,2200,200,500,500,300);
 
@@ -66,8 +67,13 @@ public class GameEngine
                     monsters.get(i).attack(hero,t);
                 }
 
-                if(hero.getDistance()>2500)soundEngine.playAudio(2);
+                if(hero.getDistance()>2700)soundEngine.playAudio(2);
                 else soundEngine.playAudio(1);
+
+                if(shakchunni.withinRange(hero))
+                {
+                    graphicsEngine.setSignal(true);
+                }
                 graphicsEngine.render(t);
                 inputEngine.takeInput();
                 inputEngine.action(monsters,background,t);

@@ -16,14 +16,16 @@ import java.util.Map;
 
 public class GraphicsEngine
 {
-    HashMap<GameObject,Views> imageMap = new HashMap<>();
-    GraphicsContext gc;
-    Background background;
-    Image [] backgroundImage;
+    private HashMap<GameObject,Views> imageMap = new HashMap<>();
+    private GraphicsContext gc;
+    private Background background;
+    private Image [] backgroundImage;
 
-    Views hero_view;
-    Views monster_view;
-    Views boss_view;
+    private Views hero_view;
+    private Views monster_view;
+    private Views boss_view;
+
+    private boolean signal = false;
 
     public void render( double time)
     {
@@ -109,7 +111,7 @@ public class GraphicsEngine
             gc.fillRect(obj.getPosX()+100,obj.getPosY()-10,100*obj.getPercentage()/100,5);
         }
 
-        else if((obj instanceof Boss))
+        else if((obj instanceof Boss) && signal)
         {
             gc.setFill(Color.YELLOW);
             gc.fillRect(100,453,700,5);
@@ -119,6 +121,10 @@ public class GraphicsEngine
             gc.setFont(Font.font(20));
             gc.fillText("Shakchunni, Reaper of the forest",100,442);
         }
+    }
+
+    public void setSignal(boolean signal) {
+        this.signal = signal;
     }
 
     public  GraphicsEngine(GraphicsContext gc, Protagonist hero, ArrayList<Enemy> monsters, Background background)
@@ -155,7 +161,7 @@ public class GraphicsEngine
         for(int i=0;i<1;i++)
         {
             backgroundImage[0] = new Image(ResourceLoader.load("forest0.png"));
-           backgroundImage[1] = new Image(ResourceLoader.load("forest1.jpg"));
+           backgroundImage[1] = new Image(ResourceLoader.load("forest1.png"));
         }
 
         Image [] imageArr = new Image[8];
@@ -194,7 +200,7 @@ public class GraphicsEngine
             imageArr4[i] = hero_img_right;
         }
 
-        Image boss_img = new Image("file:D:/SPL1/resources/shakchunni_gif.gif");
+        Image boss_img = new Image(ResourceLoader.load("sakchunni_gif1.gif"));
 
         Image [] imageArr5 = new Image[1];
 

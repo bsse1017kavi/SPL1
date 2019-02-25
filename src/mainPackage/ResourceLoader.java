@@ -1,6 +1,5 @@
 package mainPackage;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 public final class ResourceLoader

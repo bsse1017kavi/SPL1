@@ -39,19 +39,13 @@ public class Views
 
         else if(status==5) return fightMotion.getFrame(time);
 
-        else if(status==6) return jumpMotion.getFrame(time);
+        //else if(status==6) return jumpMotion.getFrame(time);
+
+        else if(status==6) return right_view;
 
         return null;
     }
 
-    public void loader(String file_path)
-    {
-        this.right_view = new Image(ResourceLoader.load(file_path+"/_s.png"));
-        this.left_view = new Image(ResourceLoader.load(file_path+"/_l_s.png"));
-
-        ArrayList<Image> right_image = new ArrayList<>();
-
-    }
 
 
 }

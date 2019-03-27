@@ -62,15 +62,23 @@ public class GraphicsEngine
                 //gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY(),sprite.getHeight(),sprite.getWidth());
                 if(sprite instanceof Boss)gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY()-40);
                 else gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY());
-                draw_health_bar(sprite);
+
             }
 
             else if(sprite.isAlive() && status==5)
             {
                 gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY()-40);
 
-                draw_health_bar(sprite);
             }
+
+
+            if(sprite.isAlive())
+            {
+                draw_health_bar(sprite);
+                draw_stamina_bar(sprite);
+                draw_focus_bar(sprite);
+            }
+
 
             if(sprite instanceof Protagonist)
             {
@@ -120,6 +128,28 @@ public class GraphicsEngine
             gc.setFill(Color.WHITE);
             gc.setFont(Font.font(20));
             gc.fillText("Shakchunni, Reaper of the forest",100,442);
+        }
+    }
+
+    public void draw_stamina_bar(Sprite obj)
+    {
+        if(obj instanceof Protagonist)
+        {
+            gc.setFill(Color.TRANSPARENT);
+            gc.fillRect(20,40,100,10);
+            gc.setFill(Color.GREEN);
+            gc.fillRect(20,40,100*((Protagonist) obj).getStamina()/100,10);
+        }
+    }
+
+    public void draw_focus_bar(Sprite obj)
+    {
+        if(obj instanceof Protagonist)
+        {
+            gc.setFill(Color.WHITE);
+            gc.fillRect(20,60,100,10);
+            gc.setFill(Color.BLUE);
+            gc.fillRect(20,60,100*((Protagonist) obj).getFocus()/100,10);
         }
     }
 

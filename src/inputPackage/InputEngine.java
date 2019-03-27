@@ -22,6 +22,8 @@ public class InputEngine
 
     double gravity = 2;
 
+
+
     public InputEngine(Protagonist hero, Scene scene) {
         this.hero = hero;
         this.scene = scene;
@@ -49,6 +51,10 @@ public class InputEngine
 
     public void action(ArrayList<Enemy> monsters, Background background, double time)
     {
+        if(hero.isDodging()) hero.setDodging(false);
+
+        hero.stamina_regen();
+
         if(hero.getPosY()<=130) floating = true;
         if(hero.getPosY()>=230) floating = false;
 
@@ -164,12 +170,14 @@ public class InputEngine
 
         }
 
-        else if(hero.isAlive() && removeActiveKey("CONTROL")/*removeActiveKey("CONTROL")*/)
+        else if(hero.isAlive() && removeActiveKey("CONTROL")  && hero.getStamina()>15)
         {
             //hero.setStatus(5);
 
             for(int i = 0; i< monsters.size(); i++)
                 hero.attack(monsters.get(i),time);
+
+            hero.stamina_deplete(15);
         }
 
         else if(!input.containsKey("RIGHT") && removeActiveKey("UP"))
@@ -181,6 +189,17 @@ public class InputEngine
                hero.ascend(100);
             }
 
+        }
+
+        else if(input.containsKey("ALT") && hero.getStamina()>10)
+        {
+            hero.setDodging(true);
+            hero.stamina_deplete(2.5);
+        }
+
+        else if(removeActiveKey("H"))
+        {
+            hero.heal();
         }
 
     }

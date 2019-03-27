@@ -27,6 +27,8 @@ public class GameEngine
     Background background;
     SoundEngine soundEngine;
 
+    private boolean isPaused = false;
+
     public GameEngine(GraphicsContext gc, Scene scene) throws MalformedURLException {
         hero =  new Protagonist(2000,150,100,0,230,150,200);
         monsters.add( new Enemy(500, 80 / 60.0, 100, 1000, 200, 319, 308, 300));
@@ -35,7 +37,7 @@ public class GameEngine
        // monsters.add(new Enemy(500,80/60.0,100,3200,200,319,308,300));
         //monsters.add(new Enemy(500,80/60.0,100,800,200,319,308,300));
         //monsters[3] = new Enemy(500,80/60.0,100,700,200,319,308,300);
-        shakchunni = new Boss(2500,380/60.0,200,3500,200,500,500,300);
+        shakchunni = new Boss(2500,380/60.0,150,3500,200,500,500,300);
         monsters.add(shakchunni);
         //monsters[3] =  new Enemy(2500,380/60.0,200,2200,200,500,500,300);
 
@@ -47,6 +49,7 @@ public class GameEngine
         graphicsEngine = new GraphicsEngine(gc,hero,monsters,background);
         inputEngine = new InputEngine(hero,scene);
         soundEngine = new SoundEngine();
+
     }
 
     public void play()
@@ -77,6 +80,7 @@ public class GameEngine
                 graphicsEngine.render(t);
                 inputEngine.takeInput();
                 inputEngine.action(monsters,background,t);
+
             }
         }.start();
     }

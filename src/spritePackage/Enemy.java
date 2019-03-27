@@ -28,11 +28,12 @@ public class Enemy extends Sprite
     @Override
     public void attack(Sprite obj,double t)
     {
+        Protagonist hero = (Protagonist)obj;
 
-        if(this.withinRange(obj) && obj.isAlive() && this.isAlive())
+        if(this.withinRange(obj) && obj.isAlive() && this.isAlive() && !hero.isDodging())
         {
             setStatus(5);
-            obj.takeDamage(this.getBaseDamage());
+            hero.takeDamage(this.getBaseDamage());
         }
 
         else setStatus(1);

@@ -3,6 +3,7 @@ package graphicsPackage;
 import javafx.scene.image.Image;
 import mainPackage.ResourceLoader;
 import spritePackage.AnimatedImage;
+import spritePackage.STATUS;
 
 import java.util.ArrayList;
 
@@ -27,21 +28,21 @@ public class Views
         this.jumpMotion = jumpMotion;
     }
 
-    public Image getView(int status, double time)
+    public Image getView(STATUS status, double time)
     {
-        if(status==1) return  right_view;
+        if(status==STATUS.RIGHT_FACING) return  right_view;
 
-        else if(status==2) return left_view;
+        else if(status==STATUS.LEFT_FACING) return left_view;
 
-        else if(status==3) return rightMotion.getFrame(time);
+        else if(status==STATUS.RIGHT_MOTION) return rightMotion.getFrame(time);
 
-        else if(status==4) return leftMotion.getFrame(time);
+        else if(status==STATUS.LEFT_MOTION) return leftMotion.getFrame(time);
 
-        else if(status==5) return fightMotion.getFrame(time);
+        else if(status==STATUS.FIGHTING) return fightMotion.getFrame(time);
 
         //else if(status==6) return jumpMotion.getFrame(time);
 
-        else if(status==6) return right_view;
+        else if(status==STATUS.JUMPING) return right_view;
 
         return null;
     }

@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import spritePackage.Enemy;
 import spritePackage.Protagonist;
+import spritePackage.STATUS;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,25 +70,25 @@ public class InputEngine
             hero.ascend(-(gravity));
         }
 
-        if(hero.getStatus()==6 && !input.containsKey("UP"))
+        if(hero.getStatus()== STATUS.JUMPING && !input.containsKey("UP"))
         {
-            hero.setStatus(1);
+            hero.setStatus(STATUS.RIGHT_FACING);
         }
 
-        if(hero.getStatus()==3 && !input.containsKey("RIGHT"))
+        if(hero.getStatus()==STATUS.RIGHT_MOTION && !input.containsKey("RIGHT"))
         {
-            hero.setStatus(1);
+            hero.setStatus(STATUS.RIGHT_FACING);
         }
 
-        else if(hero.getStatus()==4 && !input.containsKey("LEFT"))
+        else if(hero.getStatus()==STATUS.LEFT_MOTION && !input.containsKey("LEFT"))
         {
-            hero.setStatus(2);
+            hero.setStatus(STATUS.LEFT_FACING);
         }
 
         //Jump right
-        if(hero.getStatus()==1 && input.containsKey("RIGHT") && input.containsKey("UP"))
+        if(hero.getStatus()==STATUS.RIGHT_FACING && input.containsKey("RIGHT") && input.containsKey("UP"))
         {
-            hero.setStatus(1);
+            hero.setStatus(STATUS.RIGHT_FACING);
 
             boolean move = true;
 
@@ -112,9 +113,9 @@ public class InputEngine
             if(hero.getDistance()<4220) hero.setDistance(hero.getDistance()+5);
         }
 
-        else if(hero.getStatus()==5 && (!input.containsKey("CONTROL")))
+        else if(hero.getStatus()==STATUS.FIGHTING && (!input.containsKey("CONTROL")))
         {
-            hero.setStatus(1);
+            hero.setStatus(STATUS.RIGHT_FACING);
         }
 
         /*else if(!input.containsKey("CONTROL") )
@@ -133,7 +134,7 @@ public class InputEngine
         {
             //if((int)time%1==0) System.out.println(hero.getDistance());
 
-            hero.setStatus(4);
+            hero.setStatus(STATUS.LEFT_MOTION);
 
             if(hero.getPosX()>background.getLower_bound()&& (hero.getDistance()<400 || hero.getDistance()>4000))hero.translate(-5);
             else if(!(hero.getDistance()<400 || hero.getDistance()>4000))
@@ -150,7 +151,7 @@ public class InputEngine
         {
             //if((int)time%1==0) System.out.println(hero.getDistance());
 
-            hero.setStatus(3);
+            hero.setStatus(STATUS.RIGHT_MOTION);
 
             boolean move = true;
 
@@ -182,7 +183,7 @@ public class InputEngine
 
         else if(!input.containsKey("RIGHT") && removeActiveKey("UP"))
         {
-            hero.setStatus(1);
+            hero.setStatus(STATUS.RIGHT_FACING);
 
             if(!floating)
             {

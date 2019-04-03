@@ -10,9 +10,6 @@ public abstract class Sprite extends GameObject
 
     private double percentage;
 
-    public int getStatus() {
-        return status;
-    }
 
     private boolean alive = true;
 
@@ -23,13 +20,18 @@ public abstract class Sprite extends GameObject
 
     boolean dir = false;
 
-    public void setStatus(int status) {
-        this.status = status;
+    //int status = 1;
+
+    STATUS status = STATUS.RIGHT_FACING;
+
+
+    public STATUS getStatus() {
+        return status;
     }
 
-    int status = 1;
-
-
+    public void setStatus(STATUS status) {
+        this.status = status;
+    }
 
     public void translate(double x)
     {

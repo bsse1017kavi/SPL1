@@ -90,7 +90,7 @@ public class Protagonist extends Sprite
     public void attack(Sprite obj,double t)
     {
         if(this.getHealth()<=0) setAlive(false);
-        setStatus(5);
+        setStatus(STATUS.FIGHTING);
         if(withinRange(obj) && ((int)t%1==0) && obj.isAlive())
         {
             obj.takeDamage(this.getBaseDamage());

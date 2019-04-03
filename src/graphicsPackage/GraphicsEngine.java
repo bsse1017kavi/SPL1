@@ -53,11 +53,11 @@ public class GraphicsEngine
         for(Map.Entry imEntry:imageMap.entrySet())
         {
             Sprite sprite = (Sprite) imEntry.getKey();
-            int status = sprite.getStatus();
+            STATUS status = sprite.getStatus();
 
             Views view = (Views) imEntry.getValue();
 
-            if(sprite.isAlive() && status!=5)
+            if(sprite.isAlive() && status!=STATUS.FIGHTING)
             {
                 //gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY(),sprite.getHeight(),sprite.getWidth());
                 if(sprite instanceof Boss)gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY()-40);
@@ -65,7 +65,7 @@ public class GraphicsEngine
 
             }
 
-            else if(sprite.isAlive() && status==5)
+            else if(sprite.isAlive() && status==STATUS.FIGHTING)
             {
                 gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY()-40);
 

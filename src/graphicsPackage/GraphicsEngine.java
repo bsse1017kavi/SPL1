@@ -24,10 +24,15 @@ public class GraphicsEngine
     private Views hero_view;
     private Views monster_view;
     private Views boss_view;
+    private int level;
 
     private boolean signal = false;
 
-    public void render( double time)
+    public int getLevel() {
+        return level;
+    }
+
+    public void render(double time)
     {
         //Rendering background
         for(int i=0;i<2;i++)
@@ -60,14 +65,15 @@ public class GraphicsEngine
             if(sprite.isAlive() && status!=STATUS.FIGHTING)
             {
                 //gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY(),sprite.getHeight(),sprite.getWidth());
-                if(sprite instanceof Boss)gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY()-40);
+                if(sprite instanceof Boss)gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY()-40,250,324);
                 else gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY());
 
             }
 
             else if(sprite.isAlive() && status==STATUS.FIGHTING)
             {
-                gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY()-40);
+                if(sprite instanceof Boss)gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY()-40,250,324);
+                else gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY()-40);
 
             }
 
@@ -89,6 +95,7 @@ public class GraphicsEngine
                     gc.setFill(Color.CYAN);
                     gc.setFont(Font.font(100));
                     gc.fillText("LEVEL CLEAR",200,200);
+                    if(level<2)level++;
                 }
 
                 if(!hero.isAlive())
@@ -157,10 +164,12 @@ public class GraphicsEngine
         this.signal = signal;
     }
 
-    public  GraphicsEngine(GraphicsContext gc, Protagonist hero, ArrayList<Enemy> monsters, Background background)
+    public  GraphicsEngine(GraphicsContext gc, Protagonist hero, ArrayList<Enemy> monsters, Background background,int level)
     {
         this.gc = gc;
+        this.level = level;
         initialize();
+        //System.out.println(this.level);
 
         imageMap.put(hero,hero_view);
 
@@ -177,90 +186,184 @@ public class GraphicsEngine
 
     private void initialize()
     {
-        String file_path = "Nilkomol/nilkomol";
-        String monster_file_path = "monster/monster";
-
-        Image hero_img_right = new Image(file_path+"_s.png");
-        Image hero_img_left = new Image(file_path+"_l_s.png");
-
-        Image monster_img = new Image(ResourceLoader.load("monster.png"));
-
-
-        backgroundImage = new Image[2];
-
-        for(int i=0;i<1;i++)
+        if(level==1)
         {
-            backgroundImage[0] = new Image(ResourceLoader.load("forest0.png"));
-           backgroundImage[1] = new Image(ResourceLoader.load("forest1.png"));
+            //System.out.println("Level 1");
+            String file_path = "Nilkomol/nilkomol";
+            String monster_file_path = "monster/monster";
+
+            Image hero_img_right = new Image(file_path+"_s.png");
+            Image hero_img_left = new Image(file_path+"_l_s.png");
+
+            Image monster_img = new Image(ResourceLoader.load("monster.png"));
+
+
+            backgroundImage = new Image[2];
+
+            for(int i=0;i<1;i++)
+            {
+                backgroundImage[0] = new Image(ResourceLoader.load("forest0.png"));
+                backgroundImage[1] = new Image(ResourceLoader.load("forest1.png"));
+            }
+
+            Image [] imageArr = new Image[8];
+
+            for(int i=0;i<8;i++)
+            {
+                imageArr[i] = new Image(ResourceLoader.load(file_path +"_" + i + ".png" ));
+            }
+
+            Image [] imageArr1 = new Image[8];
+
+            for(int i=0;i<8;i++)
+            {
+                imageArr1[i] = new Image(ResourceLoader.load(file_path + "_l_" + i + ".png" ));
+            }
+
+            Image [] imageArr2 = new Image[5];
+
+            for(int i=0;i<5;i++)
+            {
+                imageArr2[i] = new Image(ResourceLoader.load(file_path + "fight_" + i + ".png" ));
+            }
+
+            Image [] imageArr3 = new Image[7];
+
+            for(int i=0;i<7;i++)
+            {
+                imageArr3[i] = new Image( ResourceLoader.load("monster/monster_"+ + i + ".png") );
+            }
+
+            Image [] imageArr4 = new Image[8];
+
+            for(int i=0;i<8;i++)
+            {
+                //imageArr4[i] = new Image( ResourceLoader.load(file_path+ "_jump_" +  i + ".png") );
+                imageArr4[i] = hero_img_right;
+            }
+
+            Image boss_img = new Image(ResourceLoader.load("sakchunni_gif2.gif"));
+
+            Image [] imageArr5 = new Image[1];
+
+            for(int i=0;i<1;i++)
+            {
+                //imageArr4[i] = new Image( ResourceLoader.load(file_path+ "_jump_" +  i + ".png") );
+                imageArr5[i] = boss_img;
+            }
+
+            double duration = 0.100;
+
+            AnimatedImage hero_right_motion = new AnimatedImage(imageArr,duration);
+
+            AnimatedImage hero_left_motion = new AnimatedImage(imageArr1,duration);
+
+            AnimatedImage hero_fight_motion = new AnimatedImage(imageArr2,duration);
+
+            AnimatedImage monster_fight_motion = new AnimatedImage(imageArr3,duration);
+
+            AnimatedImage hero_jump_motion = new AnimatedImage(imageArr4,duration);
+
+
+
+            AnimatedImage boss_fight_motion = new AnimatedImage(imageArr5,duration);
+
+            hero_view = new Views(hero_img_left,hero_img_right,hero_left_motion,hero_right_motion,hero_fight_motion,hero_jump_motion);
+
+            monster_view = new Views(null,monster_img,null,null,monster_fight_motion,hero_jump_motion);
+
+            boss_view = new Views(null,boss_img,null,null,boss_fight_motion,null);
         }
 
-        Image [] imageArr = new Image[8];
-
-        for(int i=0;i<8;i++)
+        else
         {
-            imageArr[i] = new Image(ResourceLoader.load(file_path +"_" + i + ".png" ));
+            String file_path1 = "nilkomol_swimming/nilkomol_swimming";
+            String file_path = "Nilkomol/nilkomol";
+            String monster_file_path = "monster/monster";
+
+            Image hero_img_right = new Image(file_path1+"_s.gif",300,200,true,true);
+            Image hero_img_left = new Image(file_path1+"_l_s.gif",300,200,true,true);
+
+            Image monster_img = new Image(ResourceLoader.load("monster.png"));
+
+
+            backgroundImage = new Image[2];
+
+            for(int i=0;i<1;i++)
+            {
+                backgroundImage[0] = new Image(ResourceLoader.load("underwater0.png"));
+                backgroundImage[1] = new Image(ResourceLoader.load("underwater0.png"));
+            }
+
+            Image [] imageArr = new Image[25];
+
+            for(int i=0;i<25;i++)
+            {
+                imageArr[i] = new Image(ResourceLoader.load(file_path1 +"_" + i + ".png" ),300,200,true,true);
+            }
+
+            Image [] imageArr1 = new Image[25];
+
+            for(int i=0;i<25;i++)
+            {
+                imageArr1[i] = new Image(ResourceLoader.load(file_path1 + "_l_" + i + ".png" ),300,200,true,true);
+            }
+
+            Image [] imageArr2 = new Image[25];
+
+            for(int i=0;i<25;i++)
+            {
+                imageArr2[i] = new Image(ResourceLoader.load(file_path1 + "_fight_" + i + ".png" ),300,200,true,true);
+                //imageArr2[i] = new Image(ResourceLoader.load(file_path1 + "_fight_" + i + ".png" ));
+            }
+
+            Image [] imageArr3 = new Image[7];
+
+            for(int i=0;i<7;i++)
+            {
+                imageArr3[i] = new Image( ResourceLoader.load("monster/monster_"+ + i + ".png") );
+            }
+
+            Image [] imageArr4 = new Image[8];
+
+            for(int i=0;i<8;i++)
+            {
+                //imageArr4[i] = new Image( ResourceLoader.load(file_path+ "_jump_" +  i + ".png") );
+                imageArr4[i] = hero_img_right;
+            }
+
+            Image boss_img = new Image(ResourceLoader.load("sakchunni_gif2.gif"));
+
+            Image [] imageArr5 = new Image[1];
+
+            for(int i=0;i<1;i++)
+            {
+                //imageArr4[i] = new Image( ResourceLoader.load(file_path+ "_jump_" +  i + ".png") );
+                imageArr5[i] = boss_img;
+            }
+
+            double duration = 0.100;
+
+            AnimatedImage hero_right_motion = new AnimatedImage(imageArr,duration);
+
+            AnimatedImage hero_left_motion = new AnimatedImage(imageArr1,duration);
+
+            AnimatedImage hero_fight_motion = new AnimatedImage(imageArr2,0.25*duration);
+
+            AnimatedImage monster_fight_motion = new AnimatedImage(imageArr3,duration);
+
+            AnimatedImage hero_jump_motion = new AnimatedImage(imageArr4,duration);
+
+
+
+            AnimatedImage boss_fight_motion = new AnimatedImage(imageArr5,duration);
+
+            hero_view = new Views(hero_img_left,hero_img_right,hero_left_motion,hero_right_motion,hero_fight_motion,hero_jump_motion);
+
+            monster_view = new Views(null,monster_img,null,null,monster_fight_motion,hero_jump_motion);
+
+            boss_view = new Views(null,boss_img,null,null,boss_fight_motion,null);
         }
-
-        Image [] imageArr1 = new Image[8];
-
-        for(int i=0;i<8;i++)
-        {
-            imageArr1[i] = new Image(ResourceLoader.load(file_path + "_l_" + i + ".png" ));
-        }
-
-        Image [] imageArr2 = new Image[5];
-
-        for(int i=0;i<5;i++)
-        {
-            imageArr2[i] = new Image(ResourceLoader.load(file_path + "fight_" + i + ".png" ));
-        }
-
-        Image [] imageArr3 = new Image[7];
-
-        for(int i=0;i<7;i++)
-        {
-            imageArr3[i] = new Image( ResourceLoader.load("monster/monster_"+ + i + ".png") );
-        }
-
-        Image [] imageArr4 = new Image[8];
-
-        for(int i=0;i<8;i++)
-        {
-            //imageArr4[i] = new Image( ResourceLoader.load(file_path+ "_jump_" +  i + ".png") );
-            imageArr4[i] = hero_img_right;
-        }
-
-        Image boss_img = new Image(ResourceLoader.load("sakchunni_gif1.gif"));
-
-        Image [] imageArr5 = new Image[1];
-
-        for(int i=0;i<1;i++)
-        {
-            //imageArr4[i] = new Image( ResourceLoader.load(file_path+ "_jump_" +  i + ".png") );
-            imageArr5[i] = boss_img;
-        }
-
-        double duration = 0.100;
-
-        AnimatedImage hero_right_motion = new AnimatedImage(imageArr,duration);
-
-        AnimatedImage hero_left_motion = new AnimatedImage(imageArr1,duration);
-
-        AnimatedImage hero_fight_motion = new AnimatedImage(imageArr2,duration);
-
-        AnimatedImage monster_fight_motion = new AnimatedImage(imageArr3,duration);
-
-        AnimatedImage hero_jump_motion = new AnimatedImage(imageArr4,duration);
-
-
-
-        AnimatedImage boss_fight_motion = new AnimatedImage(imageArr5,duration);
-
-        hero_view = new Views(hero_img_left,hero_img_right,hero_left_motion,hero_right_motion,hero_fight_motion,hero_jump_motion);
-
-        monster_view = new Views(null,monster_img,null,null,monster_fight_motion,hero_jump_motion);
-
-        boss_view = new Views(null,boss_img,null,null,boss_fight_motion,null);
 
 
     }

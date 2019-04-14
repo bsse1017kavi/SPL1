@@ -41,7 +41,7 @@ public class Main extends Application
         root.getChildren().add(canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        GameEngine gameEngine = new GameEngine(gc,scene);
+        GameEngine gameEngine = new GameEngine(gc,scene,2);
         gameEngine.play();
 
         primaryStage.setResizable(true);

@@ -98,5 +98,15 @@ public class Protagonist extends Sprite
         }
     }
 
+    @Override
+    public void respawn()
+    {
+        super.respawn();
+        setDistance(0);
+        setFocus(0);
+    }
 
+    public void setFocus(double focus) {
+        this.focus = focus;
+    }
 }

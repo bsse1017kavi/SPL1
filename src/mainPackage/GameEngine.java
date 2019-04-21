@@ -7,6 +7,8 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import soundPackage.SoundEngine;
 import spritePackage.Boss;
 import spritePackage.Enemy;
@@ -59,6 +61,11 @@ public class GameEngine extends Thread
                 if(graphicsEngine.getLevel()!=level)
                 {
                     level = graphicsEngine.getLevel();
+                    for(MediaPlayer mediaPlayer:soundEngine.getMediaPlayers())
+                    {
+                        mediaPlayer.stop();
+                    }
+                    //soundEngine.setLevel(graphicsEngine.getLevel());
                     initialize_by_level();
                 }
 
@@ -87,9 +94,9 @@ public class GameEngine extends Thread
                     monsters.get(i).attack(hero,t);
                 }
 
-                if(hero.getDistance()>2700 && level==1)
+                /*if(hero.getDistance()>2700 && level==1)
                 {
-                    soundEngine.playAudio(2);
+                    soundEngine.playAudio();
                     //System.out.println("Something wrong");
                 }
                 else if(hero.getDistance()<=2700 && level==1) soundEngine.playAudio(1);
@@ -98,12 +105,23 @@ public class GameEngine extends Thread
                     soundEngine.playAudio(3);
                     //System.out.println("Something right");
                 }
-                else soundEngine.playAudio(4);
+                else soundEngine.playAudio(4);*/
 
                 if(shakchunni.withinRange(hero))
                 {
                     graphicsEngine.setSignal(true);
                 }
+
+                if(hero.getDistance()<2700)
+                {
+                    soundEngine.playAudio(true);
+                }
+
+                else
+                {
+                    soundEngine.playAudio(false);
+                }
+
                 graphicsEngine.render(t);
                 inputEngine.takeInput();
                 inputEngine.action(monsters,background,t);

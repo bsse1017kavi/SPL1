@@ -62,20 +62,21 @@ public class GraphicsEngine
 
             Views view = (Views) imEntry.getValue();
 
-            if(sprite.isAlive() && status!=STATUS.FIGHTING)
+            if(sprite.isAlive() /*&& status!=STATUS.FIGHTING*/)
             {
                 //gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY(),sprite.getHeight(),sprite.getWidth());
-                if(sprite instanceof Boss)gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY()-40,250,324);
+                if(sprite instanceof Boss && level==1)gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY()-40,250,324);
+                else if(sprite instanceof Boss && level==2)gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY(),300,200);
                 else gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY());
 
             }
 
-            else if(sprite.isAlive() && status==STATUS.FIGHTING)
+            /*else if(sprite.isAlive() && status==STATUS.FIGHTING)
             {
-                if(sprite instanceof Boss)gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY()-40,250,324);
+                if(sprite instanceof Boss && lev)gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY()-40,250,324);
                 else gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY()-40);
 
-            }
+            }*/
 
 
             if(sprite.isAlive())
@@ -126,7 +127,7 @@ public class GraphicsEngine
             gc.fillRect(obj.getPosX()+100,obj.getPosY()-10,100*obj.getPercentage()/100,5);
         }
 
-        else if((obj instanceof Boss) && signal)
+        else if((obj instanceof Boss) && signal && level==1)
         {
             gc.setFill(Color.YELLOW);
             gc.fillRect(100,453,700,5);
@@ -135,6 +136,17 @@ public class GraphicsEngine
             gc.setFill(Color.WHITE);
             gc.setFont(Font.font(20));
             gc.fillText("Shakchunni, Reaper of the forest",100,442);
+        }
+
+        else if((obj instanceof Boss) && signal && level==2)
+        {
+            gc.setFill(Color.YELLOW);
+            gc.fillRect(100,453,700,5);
+            gc.setFill(Color.RED);
+            gc.fillRect(100,453,700*obj.getPercentage()/100,5);
+            gc.setFill(Color.WHITE);
+            gc.setFont(Font.font(20));
+            gc.fillText("Lalkomol",100,442);
         }
     }
 
@@ -279,12 +291,14 @@ public class GraphicsEngine
         {
             String file_path1 = "nilkomol_swimming/nilkomol_swimming";
             String file_path = "Nilkomol/nilkomol";
-            String monster_file_path = "monster/monster";
+            String monster_file_path = "octopus_fighiting/octopus_fighiting_";
+            String lalkomol_Path = "lalkomol_swimming/lalkomol_swimming_";
+            String boss_fight_path = "lalkomol_fight/lalkomol_fight_";
 
             Image hero_img_right = new Image(file_path1+"_s.gif",300,200,true,true);
             Image hero_img_left = new Image(file_path1+"_l_s.gif",300,200,true,true);
 
-            Image monster_img = new Image(ResourceLoader.load("monster.png"));
+            Image monster_img = new Image(ResourceLoader.load("octopus_s.gif"),319,300,true,true);
 
 
             backgroundImage = new Image[2];
@@ -317,11 +331,11 @@ public class GraphicsEngine
                 //imageArr2[i] = new Image(ResourceLoader.load(file_path1 + "_fight_" + i + ".png" ));
             }
 
-            Image [] imageArr3 = new Image[7];
+            Image [] imageArr3 = new Image[25];
 
-            for(int i=0;i<7;i++)
+            for(int i=0;i<25;i++)
             {
-                imageArr3[i] = new Image( ResourceLoader.load("monster/monster_"+ + i + ".png") );
+                imageArr3[i] = new Image( ResourceLoader.load(monster_file_path+ + i + ".png") ,319,300,true,true);
             }
 
             Image [] imageArr4 = new Image[8];
@@ -332,14 +346,22 @@ public class GraphicsEngine
                 imageArr4[i] = hero_img_right;
             }
 
-            Image boss_img = new Image(ResourceLoader.load("sakchunni_gif2.gif"));
+            //Image boss_img = new Image(ResourceLoader.load("sakchunni_gif2.gif"));
 
-            Image [] imageArr5 = new Image[1];
+            Image [] imageArr5 = new Image[25];
 
-            for(int i=0;i<1;i++)
+            for(int i=0;i<25;i++)
             {
                 //imageArr4[i] = new Image( ResourceLoader.load(file_path+ "_jump_" +  i + ".png") );
-                imageArr5[i] = boss_img;
+                imageArr5[i] = new Image(ResourceLoader.load(lalkomol_Path+i+".png"));//,300,200,true,true);
+            }
+
+            Image [] imageArr6 = new Image[25];
+
+            for(int i=0;i<25;i++)
+            {
+                //imageArr4[i] = new Image( ResourceLoader.load(file_path+ "_jump_" +  i + ".png") );
+                imageArr6[i] = new Image(ResourceLoader.load(boss_fight_path+i+".png"));//,300,200,true,true);
             }
 
             double duration = 0.100;
@@ -356,13 +378,13 @@ public class GraphicsEngine
 
 
 
-            AnimatedImage boss_fight_motion = new AnimatedImage(imageArr5,duration);
+            AnimatedImage boss_fight_motion = new AnimatedImage(imageArr6,duration);
 
             hero_view = new Views(hero_img_left,hero_img_right,hero_left_motion,hero_right_motion,hero_fight_motion,hero_jump_motion);
 
             monster_view = new Views(null,monster_img,null,null,monster_fight_motion,hero_jump_motion);
 
-            boss_view = new Views(null,boss_img,null,null,boss_fight_motion,null);
+            boss_view = new Views(null,imageArr5[0],null,null,boss_fight_motion,null);
         }
 
 

@@ -34,29 +34,38 @@ public class SoundEngine
         String audio3 = "/audio3.mp3";
         String audio4 = "/audio4.mp3";
 
-        this.fileUrl = Background.class.getResource(audio1);
-        medias.add(new Media(fileUrl.toExternalForm()));
-        mediaPlayers.add(new MediaPlayer(medias.get(0)));
-        this.fileUrl = Background.class.getResource(audio2);
-        medias.add(new Media(fileUrl.toExternalForm()));
-        mediaPlayers.add(new MediaPlayer(medias.get(1)));
-        this.fileUrl = Background.class.getResource(audio3);
-        medias.add(new Media(fileUrl.toExternalForm()));
-        mediaPlayers.add(new MediaPlayer(medias.get(2)));
-        this.fileUrl = Background.class.getResource(audio4);
-        medias.add(new Media(fileUrl.toExternalForm()));
-        mediaPlayers.add(new MediaPlayer(medias.get(3)));
+        if(level==1)
+        {
+            this.fileUrl = Background.class.getResource(audio1);
+            medias.add(new Media(fileUrl.toExternalForm()));
+            mediaPlayers.add(new MediaPlayer(medias.get(0)));
+            this.fileUrl = Background.class.getResource(audio2);
+            medias.add(new Media(fileUrl.toExternalForm()));
+            mediaPlayers.add(new MediaPlayer(medias.get(1)));
+        }
+
+        else
+        {
+            this.fileUrl = Background.class.getResource(audio3);
+            medias.add(new Media(fileUrl.toExternalForm()));
+            mediaPlayers.add(new MediaPlayer(medias.get(0)));
+            this.fileUrl = Background.class.getResource(audio4);
+            medias.add(new Media(fileUrl.toExternalForm()));
+            mediaPlayers.add(new MediaPlayer(medias.get(1)));
+        }
+
+
 
     }
 
-    public void playAudio(int num)
+    public void playAudio(boolean track)
     {
         //System.out.println(num);
        // System.out.println(current+1);
 
         //if(level!=1) mediaPlayers.get(1).stop();
 
-        if(num==1)
+        /*if(num==1)
         {
             if(current!=0)mediaPlayers.get(current).stop();
             mediaPlayers.get(0).play();
@@ -85,10 +94,26 @@ public class SoundEngine
             if(current!=3)mediaPlayers.get(current).stop();
             mediaPlayers.get(3).play();
             current=3;
+        }*/
+
+        if(track)
+        {
+            mediaPlayers.get(0).play();
+            mediaPlayers.get(1).stop();
+        }
+
+        else
+        {
+            mediaPlayers.get(0).stop();
+            mediaPlayers.get(1).play();
         }
     }
 
     public void setToStop(boolean toStop) {
         this.toStop = toStop;
+    }
+
+    public ArrayList<MediaPlayer> getMediaPlayers() {
+        return mediaPlayers;
     }
 }

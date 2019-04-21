@@ -4,6 +4,8 @@ import backgroundPackage.Background;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -30,7 +32,11 @@ public class Main extends Application
         primaryStage.setTitle("Thakurmar Jhuli");
         Pane root = new Pane();
         Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
+        //primaryStage.setScene(scene);
+
+        Parent root0 = FXMLLoader.load(getClass().getResource("/scene1.fxml"));
+        Scene scene0 = new Scene(root0);
+        primaryStage.setScene(scene0);
 
         Scale scale = new Scale(1, 1, 0, 0);
         scale.xProperty().bind(root.widthProperty().divide(900));
@@ -42,7 +48,7 @@ public class Main extends Application
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         GameEngine gameEngine = new GameEngine(gc,scene,1);
-        gameEngine.play();
+        //gameEngine.play();
 
         primaryStage.setResizable(true);
         primaryStage.setFullScreen(true);

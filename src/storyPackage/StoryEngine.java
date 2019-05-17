@@ -43,8 +43,10 @@ public class StoryEngine implements Initializable
     int i = 0;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        iv.setImage(new Image(ResourceLoader.load("bangoma.gif")));
+    public void initialize(URL location, ResourceBundle resources)
+    {
+        Image im = new Image("bangoma.gif",628,294,true,true);
+        iv.setImage(im);
         tx1.setText("");
         InputStream inputStream = ResourceLoader.load("story.txt");
         Scale scale = new Scale(1, 1, 0, 0);

@@ -32,10 +32,14 @@ public class StoryEngine implements Initializable
 {
     @FXML
     Label tx1;
+    @FXML Label tx2;
     ArrayList<String> lines = new ArrayList<>();
 
     @FXML
     ImageView iv;
+
+    Image nilkomol = new Image("nilkomol_standing.gif");
+    Image shakchunni = new Image("sakchunni_standing.gif");
 
     @FXML
     AnchorPane root0;
@@ -48,6 +52,7 @@ public class StoryEngine implements Initializable
         Image im = new Image("bangoma.gif",628,294,true,true);
         iv.setImage(im);
         tx1.setText("");
+        tx2.setText("");
         InputStream inputStream = ResourceLoader.load("story.txt");
         Scale scale = new Scale(1, 1, 0, 0);
         scale.xProperty().bind(root0.widthProperty().divide(600));
@@ -83,7 +88,7 @@ public class StoryEngine implements Initializable
                 root.getChildren().add(canvas);
                 GraphicsContext gc = canvas.getGraphicsContext2D();
 
-                GameEngine gameEngine = new GameEngine(gc,scene,2);
+                GameEngine gameEngine = new GameEngine(gc,scene,1);
                 gameEngine.play();
                 Stage window = (Stage)((Node)e.getSource()).getScene().getWindow();
                 window.setScene(scene);
@@ -94,6 +99,22 @@ public class StoryEngine implements Initializable
             else {
                 tx1.setText(lines.get(i));
                 i++;
+                if(i!= lines.size())
+                {
+                    tx2.setText(lines.get(i));
+                    i++;
+                }
+                else tx2.setText("");
+            }
+
+            if(i==lines.size()-2)
+            {
+                iv.setImage(shakchunni);
+            }
+
+            if(i==lines.size())
+            {
+                iv.setImage(nilkomol);
             }
         }
     }

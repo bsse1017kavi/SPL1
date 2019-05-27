@@ -11,7 +11,6 @@ import spritePackage.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class GraphicsEngine
@@ -28,8 +27,28 @@ public class GraphicsEngine
 
     private boolean signal = false;
 
+    private boolean paused = false;
+
+    public boolean isPaused() {
+        return paused;
+    }
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+    }
+
     public int getLevel() {
         return level;
+    }
+
+    public void pause_screen()
+    {
+        if(isPaused())
+        {
+            gc.setFill(Color.BLACK);
+            gc.setFont(Font.font(100));
+            gc.fillText("PAUSED",300,200);
+        }
     }
 
     public void render(double time)
@@ -62,7 +81,7 @@ public class GraphicsEngine
 
             Views view = (Views) imEntry.getValue();
 
-            if(sprite.isAlive() /*&& status!=STATUS.FIGHTING*/)
+            if(sprite.isAlive() && (status!=STATUS.FIGHTING_RIGHT && status!=STATUS.FIGHTING_LEFT))
             {
                 //gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY(),sprite.getHeight(),sprite.getWidth());
                 if(sprite instanceof Boss && level==1)gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY()-40,250,324);
@@ -71,12 +90,13 @@ public class GraphicsEngine
 
             }
 
-            /*else if(sprite.isAlive() && status==STATUS.FIGHTING)
+            else if(sprite.isAlive() && (status==STATUS.FIGHTING_RIGHT|| status==STATUS.FIGHTING_LEFT))
             {
-                if(sprite instanceof Boss && lev)gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY()-40,250,324);
+                if(sprite instanceof Boss && level==1)gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY()-40,250,324);
+                else if(sprite instanceof Boss && level==2)gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY(),300,200);
                 else gc.drawImage(view.getView(status,time),sprite.getPosX(),sprite.getPosY()-40);
 
-            }*/
+            }
 
 
             if(sprite.isAlive())
@@ -207,6 +227,9 @@ public class GraphicsEngine
             Image hero_img_right = new Image(file_path+"_s.png");
             Image hero_img_left = new Image(file_path+"_l_s.png");
 
+            Image hero_block_right = new Image(file_path+"_block.png");
+            Image hero_block_left = new Image(file_path+"_block_left.png");
+
             Image monster_img = new Image(ResourceLoader.load("monster.png"));
 
 
@@ -264,13 +287,22 @@ public class GraphicsEngine
                 imageArr5[i] = boss_img;
             }
 
+            Image [] imageArr6 = new Image[5];
+
+            for(int i=1;i<5;i++)
+            {
+                imageArr6[i] = new Image(ResourceLoader.load(file_path + "fight_left_" + i + ".png" ));
+            }
+
             double duration = 0.100;
 
             AnimatedImage hero_right_motion = new AnimatedImage(imageArr,duration);
 
             AnimatedImage hero_left_motion = new AnimatedImage(imageArr1,duration);
 
-            AnimatedImage hero_fight_motion = new AnimatedImage(imageArr2,duration);
+            AnimatedImage hero_fight_motion_right = new AnimatedImage(imageArr2,duration);
+
+            AnimatedImage hero_fight_motion_left = new AnimatedImage(imageArr6,duration);
 
             AnimatedImage monster_fight_motion = new AnimatedImage(imageArr3,duration);
 
@@ -280,11 +312,11 @@ public class GraphicsEngine
 
             AnimatedImage boss_fight_motion = new AnimatedImage(imageArr5,duration);
 
-            hero_view = new Views(hero_img_left,hero_img_right,hero_left_motion,hero_right_motion,hero_fight_motion,hero_jump_motion);
+            hero_view = new Views(hero_img_left,hero_img_right,hero_left_motion,hero_right_motion,hero_fight_motion_right,hero_fight_motion_left,hero_jump_motion,hero_block_right,hero_block_left);
 
-            monster_view = new Views(null,monster_img,null,null,monster_fight_motion,hero_jump_motion);
+            monster_view = new Views(null,monster_img,null,null,monster_fight_motion,null,hero_jump_motion,null,null);
 
-            boss_view = new Views(null,boss_img,null,null,boss_fight_motion,null);
+            boss_view = new Views(null,boss_img,null,null,boss_fight_motion,null,null,null,null);
         }
 
         else
@@ -297,6 +329,9 @@ public class GraphicsEngine
 
             Image hero_img_right = new Image(file_path1+"_s.gif",300,200,true,true);
             Image hero_img_left = new Image(file_path1+"_l_s.gif",300,200,true,true);
+
+            Image hero_block_right = new Image(file_path1+"_bloking.gif",300,200,true,true);
+            Image hero_block_left = new Image(file_path1+"_bloking_left.gif",300,200,true,true);
 
             Image monster_img = new Image(ResourceLoader.load("octopus_s.gif"),319,300,true,true);
 
@@ -364,13 +399,23 @@ public class GraphicsEngine
                 imageArr6[i] = new Image(ResourceLoader.load(boss_fight_path+i+".png"));//,300,200,true,true);
             }
 
+            Image [] imageArr7 = new Image[25];
+
+            for(int i=0;i<25;i++)
+            {
+                imageArr7[i] = new Image(ResourceLoader.load(file_path1 + "_fight_" + i + ".png" ),300,200,true,true);
+                //imageArr2[i] = new Image(ResourceLoader.load(file_path1 + "_fight_" + i + ".png" ));
+            }
+
             double duration = 0.100;
 
             AnimatedImage hero_right_motion = new AnimatedImage(imageArr,duration);
 
             AnimatedImage hero_left_motion = new AnimatedImage(imageArr1,duration);
 
-            AnimatedImage hero_fight_motion = new AnimatedImage(imageArr2,0.25*duration);
+            AnimatedImage hero_fight_motion_right = new AnimatedImage(imageArr2,0.25*duration);
+
+            AnimatedImage hero_fight_motion_left = new AnimatedImage(imageArr7,0.25*duration);
 
             AnimatedImage monster_fight_motion = new AnimatedImage(imageArr3,duration);
 
@@ -380,11 +425,11 @@ public class GraphicsEngine
 
             AnimatedImage boss_fight_motion = new AnimatedImage(imageArr6,duration);
 
-            hero_view = new Views(hero_img_left,hero_img_right,hero_left_motion,hero_right_motion,hero_fight_motion,hero_jump_motion);
+            hero_view = new Views(hero_img_left,hero_img_right,hero_left_motion,hero_right_motion,hero_fight_motion_right,hero_fight_motion_left,hero_jump_motion,hero_block_right,hero_block_left);
 
-            monster_view = new Views(null,monster_img,null,null,monster_fight_motion,hero_jump_motion);
+            monster_view = new Views(null,monster_img,null,null,monster_fight_motion,null,hero_jump_motion,null,null);
 
-            boss_view = new Views(null,imageArr5[0],null,null,boss_fight_motion,null);
+            boss_view = new Views(null,imageArr5[0],null,null,boss_fight_motion,null,null,null,null);
         }
 
 

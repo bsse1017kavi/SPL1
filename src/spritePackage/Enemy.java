@@ -32,7 +32,7 @@ public class Enemy extends Sprite
 
         if(this.withinRange(obj) && obj.isAlive() && this.isAlive() && !hero.isDodging())
         {
-            setStatus(STATUS.FIGHTING);
+            setStatus(STATUS.FIGHTING_RIGHT);
             hero.takeDamage(this.getBaseDamage());
         }
 

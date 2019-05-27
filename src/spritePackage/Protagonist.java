@@ -1,12 +1,5 @@
 package spritePackage;
 
-import backgroundPackage.Background;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-
-import java.util.ArrayList;
-
 public class Protagonist extends Sprite
 {
     private double distance = 0;
@@ -90,7 +83,7 @@ public class Protagonist extends Sprite
     public void attack(Sprite obj,double t)
     {
         if(this.getHealth()<=0) setAlive(false);
-        setStatus(STATUS.FIGHTING);
+        //setStatus(STATUS.FIGHTING_RIGHT);
         if(withinRange(obj) && ((int)t%1==0) && obj.isAlive())
         {
             obj.takeDamage(this.getBaseDamage());

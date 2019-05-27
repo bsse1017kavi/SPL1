@@ -13,6 +13,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import mainPackage.GameEngine;
@@ -41,6 +43,11 @@ public class StoryEngine implements Initializable
     Image nilkomol = new Image("nilkomol_standing.gif");
     Image shakchunni = new Image("sakchunni_standing.gif");
 
+    private String storyAudio = "/story.mp3";
+    private URL fileURL = getClass().getResource(storyAudio);
+    private Media media = new Media(fileURL.toExternalForm());
+    private MediaPlayer mediaPlayer = new MediaPlayer(media);
+
     @FXML
     AnchorPane root0;
 
@@ -50,6 +57,10 @@ public class StoryEngine implements Initializable
     public void initialize(URL location, ResourceBundle resources)
     {
         Image im = new Image("bangoma.gif",628,294,true,true);
+
+
+        mediaPlayer.play();
+
         iv.setImage(im);
         tx1.setText("");
         tx2.setText("");
@@ -94,6 +105,7 @@ public class StoryEngine implements Initializable
                 window.setScene(scene);
                 window.setResizable(true);
                 window.setFullScreen(true);
+                mediaPlayer.stop();
                 window.show();
             }
             else {

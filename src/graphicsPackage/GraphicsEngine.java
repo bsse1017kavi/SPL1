@@ -289,7 +289,7 @@ public class GraphicsEngine
 
             Image [] imageArr6 = new Image[5];
 
-            for(int i=1;i<5;i++)
+            for(int i=0;i<5;i++)
             {
                 imageArr6[i] = new Image(ResourceLoader.load(file_path + "fight_left_" + i + ".png" ));
             }
@@ -403,7 +403,7 @@ public class GraphicsEngine
 
             for(int i=0;i<25;i++)
             {
-                imageArr7[i] = new Image(ResourceLoader.load(file_path1 + "_fight_" + i + ".png" ),300,200,true,true);
+                imageArr7[i] = new Image(ResourceLoader.load(file_path1 + "_fight_left_" + i + ".png" ),300,200,true,true);
                 //imageArr2[i] = new Image(ResourceLoader.load(file_path1 + "_fight_" + i + ".png" ));
             }
 
